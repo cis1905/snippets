@@ -53,23 +53,30 @@ pub struct VecSet<T> {
 impl<T> VecSet<T> {
     /// Constructs a new `VecSet` with the given elements
     pub fn from_vec(elements: Vec<T>) -> Self {
-        todo!()
+        Self { elements }
     }
 }
 impl<T: Clone> VecSet<T> {
     /// Constructs a new `VecSet` with the given elements
     pub fn from_slice(elements: &[T]) -> Self {
-        todo!()
+        Self {
+            elements: elements.into(),
+        }
     }
 }
 impl<T: PartialEq> Set<T> for VecSet<T> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.elements.contains(element)
     }
 }
 impl<T: PartialEq> PartialEq for VecSet<T> {
     fn eq(&self, other: &Self) -> bool {
-        todo!()
+        for e in &self.elements {
+            if !other.contains(e) {
+                return false;
+            }
+        }
+        true
     }
 }
 impl<T: PartialEq> Eq for VecSet<T> {}
@@ -114,7 +121,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Union<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Union<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) || self.s2.contains(element)
     }
 }
 
@@ -143,7 +150,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Intersection<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Intersection<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) && self.s2.contains(element)
     }
 }
 
@@ -172,7 +179,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Difference<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Difference<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) && !self.s2.contains(element)
     }
 }
 
@@ -201,7 +208,7 @@ impl<T, S1: Set<T>, S2: Set<T>> SymmetricDifference<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for SymmetricDifference<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) != !self.s2.contains(element)
     }
 }
 
@@ -233,6 +240,6 @@ impl<T, U, S1: Set<T>, S2: Set<U>> CartesianProduct<T, U, S1, S2> {
 }
 impl<T, U, S1: Set<T>, S2: Set<U>> Set<(T, U)> for CartesianProduct<T, U, S1, S2> {
     fn contains(&self, element: &(T, U)) -> bool {
-        todo!()
+        self.s1.contains(&element.0) && self.s2.contains(&element.1)
     }
 }
