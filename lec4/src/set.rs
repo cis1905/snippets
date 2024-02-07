@@ -67,6 +67,9 @@ impl<T> Set<T> for VecSet<T> {
         todo!()
     }
 }
+impl<T> Eq for VecSet<T> {
+    fn eq(&self, other: &Self) -> bool {}
+}
 
 // TODO: implement basic set operations
 

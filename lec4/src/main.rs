@@ -43,4 +43,30 @@ mod tests {
         assert!(s.contains(&4.0));
         assert!(s.contains(&5.0));
     }
+
+    #[test]
+    fn test_vec_set_vec_constructor() {
+        let s = VecSet::from_vec(vec!["element1", "element2", "element3"]);
+
+        assert!(s.contains(&"element1"));
+        assert!(s.contains(&"element2"));
+        assert!(s.contains(&"element3"));
+        assert!(!s.contains(&"element4"));
+    }
+
+    #[test]
+    fn test_vec_set_slice_constructor() {
+        let s = VecSet::from_slice(&["element1", "element2", "element3"]);
+
+        assert!(s.contains(&"element1"));
+        assert!(s.contains(&"element2"));
+        assert!(s.contains(&"element3"));
+        assert!(!s.contains(&"element4"));
+    }
+
+    #[test]
+    fn test_union() {
+        let s1 = VecSet::from_slice(&[0, 1, 2]);
+        let s1 = VecSet::from_slice(&[2, 3, 4]);
+    }
 }
