@@ -62,7 +62,7 @@ impl<T: Clone> VecSet<T> {
         todo!()
     }
 }
-impl<T> Set<T> for VecSet<T> {
+impl<T: Eq> Set<T> for VecSet<T> {
     fn contains(&self, element: &T) -> bool {
         todo!()
     }
