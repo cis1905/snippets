@@ -62,17 +62,17 @@ impl<T: Clone> VecSet<T> {
         todo!()
     }
 }
-impl<T> Set<T> for VecSet<T> {
+impl<T: PartialEq> Set<T> for VecSet<T> {
     fn contains(&self, element: &T) -> bool {
         todo!()
     }
 }
-impl<T> PartialEq for VecSet<T> {
+impl<T: PartialEq> PartialEq for VecSet<T> {
     fn eq(&self, other: &Self) -> bool {
         todo!()
     }
 }
-impl<T> Eq for VecSet<T> {}
+impl<T: PartialEq> Eq for VecSet<T> {}
 
 // TODO: implement basic set operations
 
