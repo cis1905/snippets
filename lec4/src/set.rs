@@ -14,6 +14,7 @@ pub trait Set<T> {
 }
 
 /// The empty set, defined to contain no elements
+#[derive(Debug)]
 pub struct Empty;
 impl<T> Set<T> for Empty {
     // Since the set is empty, we always return `false`
@@ -25,6 +26,7 @@ impl<T> Set<T> for Empty {
 /// The singleton set, defined to contain exactly one element
 ///
 /// Defined to be S = {e}, where e is the singleton element
+#[derive(Debug)]
 pub struct Singleton<T>(pub T);
 impl<T: Eq> Set<T> for Singleton<T> {
     // We return `true` iff the passed in element equals the singleton element
@@ -36,6 +38,7 @@ impl<T: Eq> Set<T> for Singleton<T> {
 /// The universal set, defined to contain all elements
 ///
 /// Depending on the type `T`, may be of infinite cardinality
+#[derive(Debug)]
 pub struct Universal;
 impl<T> Set<T> for Universal {
     // Since the set is universal, we always return `true`
@@ -46,6 +49,7 @@ impl<T> Set<T> for Universal {
 
 /// A set with a finite number of elements, stored internally with a `Vec`
 /// The order of the elements should not matter
+#[derive(Debug)]
 pub struct VecSet<T> {
     /// The elements contained within the set
     elements: Vec<T>,
@@ -53,26 +57,22 @@ pub struct VecSet<T> {
 impl<T> VecSet<T> {
     /// Constructs a new `VecSet` with the given elements
     pub fn from_vec(elements: Vec<T>) -> Self {
-        todo!()
+        Self { elements }
     }
 }
 impl<T: Clone> VecSet<T> {
     /// Constructs a new `VecSet` with the given elements
     pub fn from_slice(elements: &[T]) -> Self {
-        todo!()
+        Self {
+            elements: elements.into(),
+        }
     }
 }
 impl<T: Eq> Set<T> for VecSet<T> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.elements.contains(element)
     }
 }
-impl<T> PartialEq for VecSet<T> {
-    fn eq(&self, other: &Self) -> bool {
-        todo!()
-    }
-}
-impl<T> Eq for VecSet<T> {}
 
 // TODO: implement basic set operations
 
@@ -98,13 +98,14 @@ impl<T> Eq for VecSet<T> {}
 /// Let B = {1, 2}
 ///
 /// Union(A, B) = {0, 1, 2}
+#[derive(Debug)]
 pub struct Union<T, S1: Set<T>, S2: Set<T>> {
     s1: S1,
     s2: S2,
     phantom: PhantomData<T>, // See what happens if you remove this
 }
 impl<T, S1: Set<T>, S2: Set<T>> Union<T, S1, S2> {
-    fn new(s1: S1, s2: S2) -> Self {
+    pub fn new(s1: S1, s2: S2) -> Self {
         Self {
             s1,
             s2,
@@ -114,7 +115,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Union<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Union<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) || self.s2.contains(element)
     }
 }
 
@@ -127,13 +128,14 @@ impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Union<T, S1, S2> {
 /// Let B = {1, 2}
 ///
 /// A intersection B = {1}
+#[derive(Debug)]
 pub struct Intersection<T, S1: Set<T>, S2: Set<T>> {
     s1: S1,
     s2: S2,
     phantom: PhantomData<T>, // See what happens if you remove this
 }
 impl<T, S1: Set<T>, S2: Set<T>> Intersection<T, S1, S2> {
-    fn new(s1: S1, s2: S2) -> Self {
+    pub fn new(s1: S1, s2: S2) -> Self {
         Self {
             s1,
             s2,
@@ -143,7 +145,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Intersection<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Intersection<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) && self.s2.contains(element)
     }
 }
 
@@ -156,13 +158,14 @@ impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Intersection<T, S1, S2> {
 /// Let B = {1, 2}
 ///
 /// A minus B = {0}
+#[derive(Debug)]
 pub struct Difference<T, S1: Set<T>, S2: Set<T>> {
     s1: S1,
     s2: S2,
     phantom: PhantomData<T>, // See what happens if you remove this
 }
 impl<T, S1: Set<T>, S2: Set<T>> Difference<T, S1, S2> {
-    fn new(s1: S1, s2: S2) -> Self {
+    pub fn new(s1: S1, s2: S2) -> Self {
         Self {
             s1,
             s2,
@@ -172,7 +175,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Difference<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Difference<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) && !self.s2.contains(element)
     }
 }
 
@@ -185,13 +188,14 @@ impl<T, S1: Set<T>, S2: Set<T>> Set<T> for Difference<T, S1, S2> {
 ///   Let B = {1, 2}
 ///
 ///   A symmetric difference B = {0, 2}
+#[derive(Debug)]
 pub struct SymmetricDifference<T, S1: Set<T>, S2: Set<T>> {
     s1: S1,
     s2: S2,
     phantom: PhantomData<T>, // See what happens if you remove this
 }
 impl<T, S1: Set<T>, S2: Set<T>> SymmetricDifference<T, S1, S2> {
-    fn new(s1: S1, s2: S2) -> Self {
+    pub fn new(s1: S1, s2: S2) -> Self {
         Self {
             s1,
             s2,
@@ -201,7 +205,7 @@ impl<T, S1: Set<T>, S2: Set<T>> SymmetricDifference<T, S1, S2> {
 }
 impl<T, S1: Set<T>, S2: Set<T>> Set<T> for SymmetricDifference<T, S1, S2> {
     fn contains(&self, element: &T) -> bool {
-        todo!()
+        self.s1.contains(element) != self.s2.contains(element)
     }
 }
 
@@ -215,6 +219,7 @@ impl<T, S1: Set<T>, S2: Set<T>> Set<T> for SymmetricDifference<T, S1, S2> {
 /// Let B = {x, y, z}
 ///
 /// A times B = {(0, x), (0, y), (0, z), (1, x), (1, y), (1, z)}
+#[derive(Debug)]
 pub struct CartesianProduct<T, U, S1: Set<T>, S2: Set<U>> {
     s1: S1,
     s2: S2,
@@ -222,7 +227,7 @@ pub struct CartesianProduct<T, U, S1: Set<T>, S2: Set<U>> {
     phantom2: PhantomData<U>,
 }
 impl<T, U, S1: Set<T>, S2: Set<U>> CartesianProduct<T, U, S1, S2> {
-    fn new(s1: S1, s2: S2) -> Self {
+    pub fn new(s1: S1, s2: S2) -> Self {
         Self {
             s1,
             s2,
@@ -233,6 +238,6 @@ impl<T, U, S1: Set<T>, S2: Set<U>> CartesianProduct<T, U, S1, S2> {
 }
 impl<T, U, S1: Set<T>, S2: Set<U>> Set<(T, U)> for CartesianProduct<T, U, S1, S2> {
     fn contains(&self, element: &(T, U)) -> bool {
-        todo!()
+        self.s1.contains(&element.0) && self.s2.contains(&element.1)
     }
 }
