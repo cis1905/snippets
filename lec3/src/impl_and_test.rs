@@ -10,11 +10,7 @@ enum TrafficLightStatus {
 // Excercise: Write a free function that is able to take a TrafficLightStatus value
 //  and then produces the next one.
 fn next_light(light: TrafficLightStatus) -> TrafficLightStatus {
-    match light {
-        TrafficLightStatus::Green => TrafficLightStatus::Yellow,
-        TrafficLightStatus::Yellow => TrafficLightStatus::Red,
-        TrafficLightStatus::Red => TrafficLightStatus::Green,
-    }
+    todo!("please implement next_light")
 }
 
 // Exercise: Make a method on TrafficLightStatus that dynamically tells if it's time to change the light.
@@ -31,7 +27,7 @@ fn next_light(light: TrafficLightStatus) -> TrafficLightStatus {
 //  because we are using an error type that can't be converted from some of the Results we may get.
 //  Please use pattern matching constructs or existing methods on Result to break down values and define the function based on them.
 //  Some pattern matching constructs include but are not limited to `match` and `if let`.
-use std::time::{Duration, SystemTime};
+use std::time::SystemTime;
 impl TrafficLightStatus {
     // Remember `this` isn't a keyword in Rust.
     // Please change this signature to be a method, and also implement the function.
@@ -40,15 +36,7 @@ impl TrafficLightStatus {
         this: TrafficLightStatus,
         time: SystemTime,
     ) -> Result<TrafficLightStatus, TrafficLightStatus> {
-        let Ok(elapsed) = time.elapsed() else {
-            return Err(this);
-        };
-
-        if elapsed > Duration::from_secs(5) {
-            Ok(next_light(this))
-        } else {
-            Err(this)
-        }
+        todo!("please turn next_light_if_available into a method")
     }
 }
 // The power of this pattern is that we are always able to make guarantees about
