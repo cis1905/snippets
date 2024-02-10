@@ -1,5 +1,6 @@
 pub mod set;
 
+// Feel free to experiment with how sets work here
 fn main() {
     println!("Hello, world!");
 }
