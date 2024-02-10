@@ -58,6 +58,8 @@ mod tests {
     fn test_vec_set_slice_constructor() {
         let s = VecSet::from_slice(&["element1", "element2", "element3"]);
 
+        println!("test");
+
         assert!(s.contains(&"element1"));
         assert!(s.contains(&"element2"));
         assert!(s.contains(&"element3"));
@@ -67,6 +69,93 @@ mod tests {
     #[test]
     fn test_union() {
         let s1 = VecSet::from_slice(&[0, 1, 2]);
-        let s1 = VecSet::from_slice(&[2, 3, 4]);
+        let s2 = VecSet::from_slice(&[2, 3, 4]);
+
+        let u = Union::new(s1, s2);
+
+        assert!(u.contains(&0));
+        assert!(u.contains(&1));
+        assert!(u.contains(&2));
+        assert!(u.contains(&3));
+        assert!(u.contains(&4));
+        assert!(!u.contains(&5));
+    }
+
+    #[test]
+    fn test_intersection() {
+        let s1 = VecSet::from_slice(&[0, 1, 2]);
+        let s2 = VecSet::from_slice(&[2, 3, 4]);
+
+        let u = Intersection::new(s1, s2);
+
+        assert!(!u.contains(&0));
+        assert!(!u.contains(&1));
+        assert!(u.contains(&2));
+        assert!(!u.contains(&3));
+        assert!(!u.contains(&4));
+        assert!(!u.contains(&5));
+    }
+
+    #[test]
+    fn test_difference() {
+        let s1 = VecSet::from_slice(&[0, 1, 2]);
+        let s2 = VecSet::from_slice(&[2, 3, 4]);
+
+        let u = Difference::new(s1, s2);
+
+        assert!(u.contains(&0));
+        assert!(u.contains(&1));
+        assert!(!u.contains(&2));
+        assert!(!u.contains(&3));
+        assert!(!u.contains(&4));
+        assert!(!u.contains(&5));
+    }
+
+    #[test]
+    fn test_symmetric_difference() {
+        let s1 = VecSet::from_slice(&[0, 1, 2]);
+        let s2 = VecSet::from_slice(&[2, 3, 4]);
+
+        let u = SymmetricDifference::new(s1, s2);
+
+        assert!(u.contains(&0));
+        assert!(u.contains(&1));
+        assert!(!u.contains(&2));
+        assert!(u.contains(&3));
+        assert!(u.contains(&4));
+        assert!(!u.contains(&5));
+    }
+
+    #[test]
+    fn test_cartesian_product() {
+        let s1 = VecSet::from_slice(&[0, 1, 2]);
+        let s2 = VecSet::from_slice(&[2, 3, 4]);
+
+        let u = CartesianProduct::new(s1, s2);
+
+        assert!(u.contains(&(0, 2)));
+        assert!(u.contains(&(0, 3)));
+        assert!(u.contains(&(0, 4)));
+
+        assert!(u.contains(&(1, 2)));
+        assert!(u.contains(&(1, 3)));
+        assert!(u.contains(&(1, 4)));
+
+        assert!(u.contains(&(2, 2)));
+        assert!(u.contains(&(2, 3)));
+        assert!(u.contains(&(2, 4)));
+
+        assert!(!u.contains(&(0, 0)));
+        assert!(!u.contains(&(1, 1)));
+        assert!(u.contains(&(2, 2)));
+        assert!(!u.contains(&(3, 3)));
+        assert!(!u.contains(&(4, 4)));
+
+        assert!(!u.contains(&(0, 5)));
+        assert!(!u.contains(&(1, 5)));
+        assert!(!u.contains(&(2, 5)));
+        assert!(!u.contains(&(3, 5)));
+        assert!(!u.contains(&(4, 5)));
+        assert!(!u.contains(&(5, 5)));
     }
 }
