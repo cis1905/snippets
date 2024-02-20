@@ -7,27 +7,28 @@ use std::marker::PhantomData;
 fn longest_str() {}
 
 /// A series of array "chunk" references
-/// Cannot outlive the lifetime of the underlying array `'s`
+/// Cannot outlive the lifetime of the underlying array `'a`
 /// You will need to store a series of array slices
 #[derive(Clone, Debug)]
-pub struct ArrayChunks<'s> {
-    _phantom: &'s PhantomData<()>,
+pub struct ArrayChunks<'a> {
+    _phantom: &'a PhantomData<()>,
 }
 
-impl<'s> ArrayChunks<'s> {
+/// We need to make our `impl` generic over all lifetimes `'a`
+impl<'a> ArrayChunks<'a> {
     /// Returns a list of strictly-increasing chunks of the array
-    pub fn increasing(arr: &'s [i32]) -> Self {
+    pub fn increasing(arr: &'a [i32]) -> Self {
         todo!()
     }
 
     /// Returns a list of strictly-decreasing chunks of the array
-    pub fn decreasing(arr: &'s [i32]) -> Self {
+    pub fn decreasing(arr: &'a [i32]) -> Self {
         todo!()
     }
 
     /// Returns a list of same-parity chunks of the array
     /// That is, chunks that are entirely even or entirely odd
-    pub fn same_parity(arr: &'s [i32]) -> Self {
+    pub fn same_parity(arr: &'a [i32]) -> Self {
         todo!()
     }
 }
