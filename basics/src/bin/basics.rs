@@ -3,7 +3,7 @@
 use std::{thread, time::Duration};
 
 fn main() {
-    /// ---------------------------- Basic Syntax -------------------------------
+    // ---------------------------- Basic Syntax -------------------------------
     let x = 0;
     let mut y = 5;
 
@@ -25,9 +25,10 @@ fn main() {
 
 /// ---------------------------- Functions -------------------------------
 /// Return keyword is optional if you omit ;. See example:
-fn five() -> i32 {
-    5
+fn five(input: i32) -> i32 {
+    5 + input
 }
+
 // Make sure you omit ; at the end if you are using the simplified return!
 fn control_flow() {
     'outer: loop {

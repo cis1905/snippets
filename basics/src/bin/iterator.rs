@@ -17,7 +17,7 @@ fn infinite_iterator() {
         count += 1;
         Some(count)
     });
-
+ 
     // Guess; what happens if you call it as is?
     // Remove `.by_ref()`. What do you think happens?
     for i in iterator.by_ref().take(10) {
