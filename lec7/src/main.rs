@@ -32,19 +32,12 @@ fn shared_counter(n: usize) -> i32 {
         // TODO: make a new clone of the counter and send it to a new thread.
         // Within that thread, increment the counter by 1. Don't forget to
         // push the thread's handle onto the join_handles vec!
-        let counter_clone = Arc::clone(&counter);
-        let t = thread::spawn(move || {
-            let mut guard = counter_clone.lock().unwrap();
-            *guard += 1;
-        });
-        join_handles.push(t);
     }
 
     // Now, we need to join all of the threads we made to the main thread to
     // make sure the final value is available...
     for handle in join_handles {
         // TODO: join the handle to the main thread
-        handle.join().unwrap();
     }
 
     return *counter.lock().unwrap();
@@ -79,17 +72,13 @@ fn launch_multiplier() {
         let stdin = std::io::stdin();
         let mut line_buf = String::new();
         while let Ok(_) = stdin.read_line(&mut line_buf) {
-            let mut queue = lock.lock().unwrap();
-            let int: Result<i32, _> = line_buf.trim().parse();
-            line_buf.clear();
-
-            if let Err(_) = int {
-                println!("That's not an int! Try again.");
-                continue;
-            }
-
-            queue.push_back(int.unwrap());
-            cvar.notify_one();
+            // 1. Now that there's a line to read, acquire a lock on the queue
+            // 2. Parse the line as an integer
+            // 3. Clear the line buffer
+            // 4. Check to make sure the integer parsed correctly
+            // 5. Add the integer to the queue
+            // 6. Then call cvar.notify_one(); to notify one consumer that there
+            //    is a value waiting to be consumed
         }
     });
 
@@ -97,21 +86,29 @@ fn launch_multiplier() {
     let consumer = thread::spawn(move || {
         let (lock, cvar) = &*for_consumer;
         loop {
-            let mut queue = lock.lock().unwrap();
-            while queue.is_empty() {
-                queue = cvar.wait(queue).unwrap();
-            }
-            let value = queue.pop_front().unwrap();
-            println!("Consumed {}, result is {}", value, value * 10);
+            // 1. Acquire a lock on the queue
+            // 2. While the queue is empty, do the following:
+            //    
+            //    queue = cvar.wait(queue).unwrap();
+            //    
+            //    cvar.wait(queue) will release the lock on the queue and halt
+            //    the thread until it is notified. At that point, it'll 
+            //    re-acquire the lock and return the locked queue!
+            //
+            // 3. Then, do the computation (* 10) and print the result
         }
     });
 
+    // Here, I'll join the threads for you :)
     producer.join();
     consumer.join();
 }
 
 fn main() {
-    println!("Counter value is: {}", shared_counter(10));
+    // Uncomment after task 1, should print "Counter value is: 10"
+    // println!("Counter value is: {}", shared_counter(10));
 
-    launch_multiplier();
+    // Uncomment after task 2, should be able to write in values and see the
+    // result of the computation printed
+    // launch_multiplier();
 }
