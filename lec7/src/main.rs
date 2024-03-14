@@ -17,7 +17,6 @@ use std::thread::{self, JoinHandle};
 
 // Let's start by implementing a simple multi-threaded counter
 
-/// Counts up to n using n threads
 fn shared_counter(n: usize) -> i32 {
 
     // We'll start by declaring a counter using an atomically reference counted
@@ -50,7 +49,7 @@ fn shared_counter(n: usize) -> i32 {
 */
 
 // Let's get a little bit fancier... Another common use case for mutexes is
-// a producer/consumer pair. As the name implies, the procer produces values
+// a producer/consumer queue. As the name implies, the procer produces values
 // and the consumer consumes them. For example, let's imagine we want a program
 // to listen to input from the user and multiply that input by 10. In reality,
 // the computation may be really expensive, and we don't want to hang on the
@@ -96,8 +95,17 @@ fn launch_multiplier() {
             //    re-acquire the lock and return the locked queue!
             //
             // 3. Then, do the computation (* 10) and print the result
+            // 4. BONUS: if you do things right, you should be able to insert
+            //    a delay into your computation and still queue values from 
+            //    the producer. To insert a 1-sec delay, use:
+            // 
+            //    thread::sleep(std::time::Duration::from_millis(1000));
         }
     });
+
+    // EVEN MORE BONUS: you can add multiple consumers! Try it out. Make a 
+    // function which creates a new consumer and returns its join handle. Give
+    // each consumer a unique ID and print it out with the output. 
 
     // Here, I'll join the threads for you :)
     producer.join();
