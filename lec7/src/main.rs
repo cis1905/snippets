@@ -7,17 +7,16 @@ use std::ops::Add;
 use std::sync::{Arc, Condvar, Mutex};
 use std::thread::{self, JoinHandle};
 use std::time::Duration;
+use std::sync::mpsc;
 
 use tokio::join;
 
-////////////////////////
-// MUTEXES (MUTICES?) //
-////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//                                    MUTEX                                  //
+///////////////////////////////////////////////////////////////////////////////
 
 /*
-
 1. MULTI-THREADED COUNTER
-
 */
 
 // Let's start by implementing a simple multi-threaded counter
@@ -115,6 +114,9 @@ fn launch_multiplier() {
     consumer.join();
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//                               FUTURES                                    //
+//////////////////////////////////////////////////////////////////////////////
 /*
 
 3. ASYNC/AWAIT
@@ -176,6 +178,51 @@ async fn add_parallel() {
     let (msg1, msg2, msg3) = join!(add_many(&ints), add_many(&floats), add_many(&strings));
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//                              CHANNELS                                     //
+///////////////////////////////////////////////////////////////////////////////
+/*
+4. Default std channels
+*/
+
+// Let's start by creating a variant of the launch_multiplier function that uses
+// the default std channels instead of Arc<Mutex<...>>. This will allow us to
+// send values between threads without needing to worry about locks.
+fn launch_multiplier_channels() {
+    todo!()
+}
+
+/*
+5. Different tokio channels
+*/
+// Now, let's try using the various tokio channels
+
+// Oneshot: A channel that can send a single value
+// Let's say you want to send a single value from one task to another. You can
+// use a oneshot channel to do this. The sender can only send one value, and the
+// receiver can only receive one value. Once the value is sent, the channel is
+// closed.
+// Here, we will have one thread 
+async fn load_configuration() -> String {
+    // Load the random.json file and return the contents as a string
+}
+
+/* 
+These make take longer to build, so it's okay if you get stuck or don't finish!
+
+Broadcast and MPSC: Pick one of the two open ended channel usages below and write
+an application that uses it.
+
+Potential application ideas if you get stuck:
+- Mock polleverywhere. Build a basic model of poll everywhere where you can
+  send a question to a channel and have multiple people respond to it. You can
+  have two threads - one for sending questions and one for receiving responses.
+- Chat application. You can have thread(s) for sending messages and thread(s) for
+  receiving messages.
+*/
+
+
 #[tokio::main]
 async fn main() {
     // Uncomment after task 1, should print "Counter value is: 10"
@@ -187,4 +234,13 @@ async fn main() {
 
     // Uncomment after task 3, should print the result of add_many in parallel
     // add_parallel().await;
+
+    // Uncomment after task 4, should be able to write in values and see the
+    // result of the computation printed
+    // launch_multiplier_channels();
+
+    // Uncomment after task 5, should print the result of load_configuration
+    // println!("Configuration loaded: {}", load_configuration().await);
+
+    // Add your task6 functions calls here
 }
