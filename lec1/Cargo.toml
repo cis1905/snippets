@@ -1,8 +1,11 @@
 [package]
-name = "basics"
+name = "lec1"
 version = "0.1.0"
 edition = "2021"
-authors = ["Joy Liu <joyliu.q@gmail.com>", "Caleb Stanford <caleb.pirsquared@gmail.com>"]
+authors = [
+	"Joy Liu <joyliu.q@gmail.com>",
+	"Caleb Stanford <caleb.pirsquared@gmail.com>",
+]
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,3 +13,4 @@ authors = ["Joy Liu <joyliu.q@gmail.com>", "Caleb Stanford <caleb.pirsquared@gma
 [dependencies]
 rayon = "1.5.0"
 reqwest = { version = "0.11.0", features = ["blocking"] }
+
