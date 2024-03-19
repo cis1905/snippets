@@ -149,6 +149,14 @@ where
 {
     // TODO: Use a for loop and async/await syntax to call expensive_add on each
     // input pair of T's, then print the result of each addition
+    for (x, y) in inputs {
+        println!(
+            "{} + {} = {}",
+            x,
+            y,
+            expensive_add(x.clone(), y.clone()).await
+        );
+    }
 
     "done!"
 }
