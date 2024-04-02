@@ -11,7 +11,7 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
 
     // Build the trait implementation
-    impl_display_macro(&ast)
+    impl_display_macro(&ast) // we're in a function, so we can split up code just like in regular Rust
 }
 
 fn impl_display_macro(ast: &syn::DeriveInput) -> TokenStream {
@@ -42,3 +42,16 @@ fn impl_display_macro(ast: &syn::DeriveInput) -> TokenStream {
     gen.into()
 }
 
+
+// this is similar to the one shown in class
+#[proc_macro_attribute]
+pub fn only_structs(attr: TokenStream, input: TokenStream, ) -> TokenStream {
+    // ... find out if it’s a struct
+    let ast : syn::DeriveInput = syn::parse(input).unwrap();
+    let syn::Data::Struct(_) = &ast.data else {
+        return (quote!{
+            compile_error!("The only_structs macro only goes on structs")
+        }).into()
+    };
+    (quote!{}).into()
+}

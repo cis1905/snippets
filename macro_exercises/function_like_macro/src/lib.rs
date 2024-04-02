@@ -19,7 +19,8 @@ macro_rules! add {
 
 #[macro_export]
 macro_rules! group_apply {
-    // like in regular expressions, * means "zero or more elements"
+    // We can make more complex patterns by separating  elements (with punctuation, spaces, or symbols like =>)
+    //  or by using other syntactic elements like keywords, which can't be confused for expressions.
     ( $( $x:expr ),* => $y: expr ) => {
         {
             $(
@@ -28,6 +29,10 @@ macro_rules! group_apply {
         }
     };
 }
+
+// Exercise: What happens if you change the syntax rules to the above?
+//  What happens if you write a test that breaks one of the syntax rules?
+//  You can look at the output of a 
 
 #[cfg(test)]
 mod tests {
