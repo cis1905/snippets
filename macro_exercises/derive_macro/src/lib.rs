@@ -41,9 +41,11 @@ fn impl_display_macro(ast: &syn::DeriveInput) -> TokenStream {
     };
     gen.into()
 }
+// Exercise: Change the macro to allow different kinds of structs. We've handled named structs, but what about tuple structs and unit structs?
 
 
 // this is similar to the one shown in class
+// what happens if you apply it to an enum?
 #[proc_macro_attribute]
 pub fn only_structs(attr: TokenStream, input: TokenStream, ) -> TokenStream {
     // ... find out if it’s a struct
